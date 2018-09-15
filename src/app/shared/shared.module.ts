@@ -6,6 +6,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AsyncBookmarkListComponent} from './async-bookmark-list.component';
 import {TagsValidatorDirective} from './tags-validation.directive';
 import {BookmarkSearchComponent} from './search/bookmark-search.component';
+import {MatAutocompleteModule, MatFormFieldModule, MatIconModule, MatInputModule} from '@angular/material';
 
 
 /**
@@ -17,6 +18,10 @@ import {BookmarkSearchComponent} from './search/bookmark-search.component';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatAutocompleteModule,
   ],
   declarations: [
     HighLightPipe,

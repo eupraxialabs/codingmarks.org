@@ -19,6 +19,8 @@ export class PublicBookmarksComponent implements OnInit {
   tags: string[] = allTags;
   query = '';
 
+  publicTags =  allTags;
+
   @ViewChild(BookmarkSearchComponent)
   private searchComponent: BookmarkSearchComponent;
 

@@ -2,7 +2,15 @@
   <div class="input-group-prepend">
     <span class="input-group-text" id="basic-addon1"><i class="fa fa-search"></i></span>
   </div>
-  <input type="text" class="form-control" [formControl]="term" placeholder="Search in {{context}} bookmarks... (tag filtering via square brackets: e.g. [angular])">
+  <!--<mat-form-field>-->
+    <input matInput type="text" class="form-control" [formControl]="term" placeholder="Search in {{context}} bookmarks... (tag filtering via square brackets: e.g. [angular])"
+           [matAutocomplete]="auto">
+  <!--</mat-form-field>-->
+  <mat-autocomplete #auto="matAutocomplete">
+    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+      {{option}}
+    </mat-option>
+  </mat-autocomplete>
 </div>
 
 <div id="language-select" class="input-group" readonly>

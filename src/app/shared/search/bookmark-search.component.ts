@@ -9,6 +9,7 @@ import {Bookmark} from '../../core/model/bookmark';
 import {List} from 'immutable';
 import {languages} from '../language-options';
 import {PublicBookmarksStore} from '../../public/bookmark/store/public-bookmarks.store';
+import {startWith, map} from 'rxjs/operators';
 
 @Component({
     selector: 'app-bookmark-search',
@@ -26,6 +27,9 @@ export class BookmarkSearchComponent implements OnInit, AfterViewInit {
   @Input()
   context: string;
 
+  @Input()
+  autocompleteTags?: string[];
+
   filteredBookmarks: Observable<Bookmark[]>;
   private filterBookmarksBySearchTerm: Bookmark[];
 
@@ -38,6 +42,8 @@ export class BookmarkSearchComponent implements OnInit, AfterViewInit {
   language = 'all';
 
   languages = languages;
+
+  filteredOptions: Observable<string[]>;
 
   constructor(private router: Router, private bookmarkStore: PublicBookmarksStore, private bookmarkFilterService: BookmarkFilterService) {}
 
@@ -77,6 +83,12 @@ export class BookmarkSearchComponent implements OnInit, AfterViewInit {
         return observableOf<Bookmark[]>([]);
       }), );
 
+    this.filteredOptions = this.term.valueChanges
+      .pipe(
+        startWith(''),
+        map(value => this._filter(value))
+      );
+
 
   }
 
@@ -109,4 +121,11 @@ export class BookmarkSearchComponent implements OnInit, AfterViewInit {
     this.language = newValue;
     this.term.setValue(this.queryText);
   }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.autocompleteTags.filter(option => option.toLowerCase().includes(filterValue));
+  }
+
 }
