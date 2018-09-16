@@ -18,6 +18,7 @@ export class PersonalBookmarksListComponent implements OnInit {
   userBookmarksLastUpdated: Observable<Bookmark[]>;
   query = '';
   showLastAccessed = true;
+  autocompleteTags: string[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -42,6 +43,7 @@ export class PersonalBookmarksListComponent implements OnInit {
           if (a.updatedAt === b.updatedAt) { return 0; }
         }).toArray();
     }));
+    this.autocompleteTags = this.userBookmarkStore.getPersonalAutomcompleteTagsForSearch();
   }
 
   goToAddNewPersonalBookmark(): void {

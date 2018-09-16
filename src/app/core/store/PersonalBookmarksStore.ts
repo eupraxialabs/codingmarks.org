@@ -71,6 +71,10 @@ export class PersonalBookmarksStore {
     return Array.from(this.autocompleteTags).sort();
   }
 
+  getPersonalAutomcompleteTagsForSearch(): string[] {
+    return Array.from(this.personalTags).sort();
+  }
+
   addBookmark(userId: string, newBookmark: Bookmark): Observable<any> {
 
     const obs = this.userBookmarkService.saveBookmark(userId, newBookmark);
