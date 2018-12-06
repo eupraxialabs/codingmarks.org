@@ -27,9 +27,18 @@ export class BookmarkSearchComponent implements OnInit, AfterViewInit {
   @Input()
   context: string;
 
-  @Input()
-  autocompleteTags?: string[];
 
+  _autocompleteTags?: string[];
+
+  @Input()
+  set autocompleteTags(autocompleteTags: string[]) {
+    this._autocompleteTags = autocompleteTags;
+  }
+
+
+  get autocompleteTags(){
+    return this._autocompleteTags;
+  }
   filteredBookmarks: Observable<Bookmark[]>;
   private filterBookmarksBySearchTerm: Bookmark[];
 
@@ -125,7 +134,7 @@ export class BookmarkSearchComponent implements OnInit, AfterViewInit {
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
 
-    return this.autocompleteTags.filter(option => option.toLowerCase().includes(filterValue));
+    return this._autocompleteTags.filter(option => option.toLowerCase().includes(filterValue));
   }
 
 }

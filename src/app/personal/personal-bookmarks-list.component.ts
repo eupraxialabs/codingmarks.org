@@ -1,6 +1,6 @@
 
 import {map} from 'rxjs/operators';
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {Bookmark} from '../core/model/bookmark';
 import {Observable} from 'rxjs';
 import {List} from 'immutable';
@@ -12,7 +12,7 @@ import {ActivatedRoute, Router} from '@angular/router';
   templateUrl: './personal-bookmarks-list.component.html',
   styleUrls: ['./personal-bookmarks-list.component.scss']
 })
-export class PersonalBookmarksListComponent implements OnInit {
+export class PersonalBookmarksListComponent implements OnInit, AfterViewInit {
 
   userBookmarks: Observable<List<Bookmark>>;
   userBookmarksLastUpdated: Observable<Bookmark[]>;
@@ -23,7 +23,7 @@ export class PersonalBookmarksListComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private userBookmarkStore: PersonalBookmarksStore) { }
+    private personalBookmarksStore: PersonalBookmarksStore) { }
 
   ngOnInit(): void {
     this.query = this.route.snapshot.queryParamMap.get('q');
@@ -35,7 +35,7 @@ export class PersonalBookmarksListComponent implements OnInit {
         this.query = this.query.replace(/\+/g,  ' ');
       }
     }
-    this.userBookmarks = this.userBookmarkStore.getBookmarks();
+    this.userBookmarks = this.personalBookmarksStore.getBookmarks();
     this.userBookmarksLastUpdated = this.userBookmarks.pipe(map((data) => {
         return data.sort((a, b) => {
           if (a.updatedAt < b.updatedAt) { return 1; }
@@ -43,7 +43,15 @@ export class PersonalBookmarksListComponent implements OnInit {
           if (a.updatedAt === b.updatedAt) { return 0; }
         }).toArray();
     }));
-    this.autocompleteTags = this.userBookmarkStore.getPersonalAutomcompleteTagsForSearch();
+
+    this.autocompleteTags = this.personalBookmarksStore.getPersonalAutomcompleteTagsForSearch();
+  }
+
+
+  ngAfterViewInit(): void {
+/*    setTimeout(() => {
+    this.autocompleteTags = this.personalBookmarksStore.getPersonalAutomcompleteTagsForSearch();
+    });*/
   }
 
   goToAddNewPersonalBookmark(): void {

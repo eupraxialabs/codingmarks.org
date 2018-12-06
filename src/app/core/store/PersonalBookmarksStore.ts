@@ -21,11 +21,10 @@ export class PersonalBookmarksStore {
 
   private userId: String;
 
-  private personalTags: Set<string>;
+  private personalTags: Set<string> = new Set();
   autocompleteTags = publicTags;
 
   constructor(private userBookmarkService: PersonalBookmarksService,
-                private logger: Logger,
                 private router: Router,
                 private errorService: ErrorService,
                 private keycloakService: KeycloakService,
@@ -34,6 +33,7 @@ export class PersonalBookmarksStore {
       keycloakService.loadUserProfile().then( keycloakProfile => {
         this.userId = keycloakProfile.id;
         this.loadInitialData();
+        console.log("loading personal initial data...");
       });
     }
 
@@ -55,6 +55,7 @@ export class PersonalBookmarksStore {
               this.personalTags = this.personalTags.add(tag.trim().toLowerCase());
             });
           });
+          console.log("personal tags should be ready by now...", this.personalTags);
           this._bookmarks.next(List(bookmarks));
         },
         err => console.error('Error retrieving bookmarks', err)
@@ -72,7 +73,7 @@ export class PersonalBookmarksStore {
   }
 
   getPersonalAutomcompleteTagsForSearch(): string[] {
-    return Array.from(this.personalTags).sort();
+    return this.personalTags ? Array.from(this.personalTags).sort() : [];
   }
 
   addBookmark(userId: string, newBookmark: Bookmark): Observable<any> {
